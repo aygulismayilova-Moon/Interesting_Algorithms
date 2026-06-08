@@ -210,7 +210,7 @@ def queensAttack(n, k,y ,x,  obs):
             f_3=l_3-(y-d3_c-1)
         if d4_c!=0:
             f_4=l_4-(y-d4_c-1)
-        l_t=l_1+l_2+l_3+l_4
+            l_t=l_1+l_2+l_3+l_4
         #count_diag=l_t//reducing for loops on top 
     
        
@@ -223,7 +223,7 @@ def queensAttack(n, k,y ,x,  obs):
             f_3=r_3-(y-d3_c)
         if d4_c!=0:
             f_4=r_4-(y-d4_c)
-        r_t=r_1+r_2+r_3+r_4
+            r_t=r_1+r_2+r_3+r_4
         #count_diag=r_t //reducing for loops on top
     elif x<=y and x<(n-y):
         if d1_c!=0:
@@ -234,7 +234,7 @@ def queensAttack(n, k,y ,x,  obs):
             f_3=(d3_c)
         if d4_c!=0:
             f_4=r4-(y-1-d4_c)
-        c_t=r4+r1+r2+r3
+            c_t=r4+r1+r2+r3
         #count_diag =c_t //reduce for loops on top
     
     

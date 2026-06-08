@@ -1,0 +1,274 @@
+#!/bin/python3
+
+import math
+import os
+import random
+import re
+import sys
+import time 
+
+def queensAttack(n, k,y ,x,  obs):
+    
+    # Write your code here
+    coordinates=[]
+        
+    #####find diagonals coordinates#####
+    ##easy way when calc count_diag correcly, you can delete these for loops for performance increasing 
+    y_d_d=y
+    x_l_d=x
+    d_l_d=[]
+    h=min(x,y)
+    
+    for f in range(h-1):
+        y_d_d-=1
+        x_l_d-=1
+        if y_d_d<=n and x_l_d<=n and y_d_d>=1 and x_l_d>=1:
+            g=[y_d_d,x_l_d]
+            d_l_d+=[g]
+    
+    #print(start-end)
+    y_u_d=y
+    x_l_u_d=x
+    d_l_u_d=[]
+    z=max(x,y)
+    if z!=n:
+        for s in range(z-1):
+            y_u_d+=1
+            x_l_u_d-=1
+            if y_u_d<=n and x_l_u_d<=n and y_u_d>=1 and x_l_u_d>=1:
+                t=[y_u_d,x_l_u_d]
+                d_l_u_d+=[t]
+    elif z==n and y==x:
+        d_l_u_d=[]
+    elif z==n and x>y:
+        for i in range(y):
+            y_u_d+=1
+            x_l_u_d-=1
+            if y_u_d<=n and x_l_u_d<=n and y_u_d>=1 and x_l_u_d>=1:
+                t=[y_u_d,x_l_u_d]
+                d_l_u_d=[t]
+
+    y_u_r_d=y
+    x_r_u_d=x
+    r_u=[]
+    v=min(y,x)
+    if x==n or y==n:
+        r_u=[]
+    else:
+        for b in range(v-1,n):
+            y_u_r_d+=1
+x_r_u_d+=1
+            if y_u_r_d<=n and x_r_u_d<=n and y_u_r_d>=1 and x_r_u_d>=1:
+                d=[y_u_r_d,x_r_u_d]
+                r_u+=[d]
+    y_d_r_d=y
+    x_d_r_d=x
+    r_d=[]
+    if x==n:
+        r_d=[]
+    else:
+        for a in range(z):
+            y_d_r_d-=1
+            x_d_r_d+=1
+            if y_d_r_d<=n and y_d_r_d>=1 and x_d_r_d<=n and x_d_r_d>=1:
+                p=[y_d_r_d,x_d_r_d]
+                #print(p)
+                r_d+=[p]
+    ####calc total points########
+    coordinates=r_d+r_u+d_l_u_d+d_l_d
+    vert_hor=x-1+y-1+n-x+n-y
+    q_a_count=(len(coordinates)+vert_hor)
+    
+
+####find obstacles which on the vertical and horizontal coordinates#######
+    ob_c=[]
+    k_l_max=[]
+    k_l_min=[]
+    m_l_max=[]
+    m_l_min=[]
+    a=0
+    u=0
+    c=0
+    d=0
+    ob_d=[]
+    start=time.perf_counter()
+    for o in obs:
+        if o[0]==y or o[1]==x:
+            ob_c+=[o]
+        elif o[0]!=y and o[1]!=x and abs(o[0]-y)==abs(x-o[1]):
+            ob_d+=[o]
+    end=time.perf_counter()
+    print(start-end)
+    start=time.perf_counter()
+    for b in ob_c:
+      if b[0]==y and b[1]<x:
+            k_l_max+=[b[1]]
+            a+=1
+        if b[0]==y and b[1]>x:
+            k_l_min+=[b[1]]
+            u+=1
+        if b[1]==x and b[0]<y:
+            m_l_max+=[b[0]]
+            c+=1
+        if b[1]==x and b[0]>y:
+            m_l_min+=[b[0]]
+            d+=1
+    if a==0:
+        k_l_max+=[0]
+    if u==0:
+        k_l_min+=[0]
+    if c==0:
+        m_l_max+=[0]
+    if d==0:
+        m_l_min+=[0]
+    end=time.perf_counter()
+    print(start-end)
+    
+    if min(k_l_min)!=0 and min(m_l_min)!=0:
+        result=q_a_count-max(k_l_max)-(n-(min(k_l_min)-1))-max(m_l_max)-(n-(min(m_l_min)-1))
+    elif min(k_l_min)==0 and min(m_l_min)==0:
+        result=q_a_count-max(k_l_max)-max(m_l_max)
+    elif min(k_l_min)!=0 and min(m_l_min)==0:
+        result=q_a_count-max(k_l_max)-max(m_l_max)-(n-(min(k_l_min)-1))
+    elif min(k_l_min)==0 and min(m_l_min)!=0:
+        result=q_a_count-max(k_l_max)-max(m_l_max)-(n-(min(m_l_min)-1))
+    
+    ######find the obstacles coordinates which on the diagonals######
+    d1=[]
+    d2=[]
+    d3=[]
+    d4=[]
+    for t in ob_d:
+        if t[0]>y and t[1]<x:
+            d1+=[t[0]]
+        elif t[0]>y and t[1]>x:
+            d2+=[t[0]]
+        elif t[0]<y and t[1]>x:
+            d3+=[t[0]]
+       elif t[0]<y and t[1]<x:
+            d4+=[t[0]]
+        
+    if len(d1)==0:
+        d1+=[0]
+    if len(d2)==0:
+        d2+=[0]
+    if len(d3)==0:
+        d3+=[0]
+    if len(d4)==0:
+        d4+=[0]
+    
+    d1_c=min(d1)
+    d2_c=min(d2)
+    d3_c=max(d3)
+    d4_c=max(d4)
+   f_1=0
+    f_2=0
+    f_3=0
+    f_4=0
+    r_1=n-(y+1)
+    r_2=n-(y+1)
+    r_3=n-x
+    r_4=n-y
+    r_t=0
+    
+    r1=x-1
+    r2=n-y
+    r3=n-x
+    r4=x-1
+    c_t=0
+    k_1=x-1
+    k_2=n-x
+    k_3=y-1
+    k_4=y-1
+    k_t=0
+    l_2=n-x
+    l_1=n-y
+    l_3=n-x 
+    l_4=y-1
+    l_t=0
+    count_diag=0
+    
+    
+    if x>=y and x<=(n-y):
+        if d1_c!=0:
+            f_1=k_1-(d1_c-y)+1
+        if d2_c!=0:
+            f_2=k_2-(d2_c-y)+1
+        if d3_c!=0:
+            f_3=k_3-(y-d3_c)+1
+        if d4_c!=0:
+            f_4=k_4-(y-d4_c)+1
+        k_t=k_1+k_2+k_3+k_4
+        #count_diag=k_t// reducing for loops on top 
+    elif x>=y and x>(n-y):
+        if d1_c!=0:
+            f_1=l_1-(d1_c-1-y)
+            print(f_1)
+        if d2_c!=0:
+            f_2=l_2-(d2_c-1-y)
+        if d3_c!=0:
+            f_3=l_3-(y-d3_c-1)
+        if d4_c!=0:
+            f_4=l_4-(y-d4_c-1)
+        l_t=l_1+l_2+l_3+l_4
+        #count_diag=l_t//reducing for loops on top 
+    
+       
+    elif x<=y and x>=(n-y):
+        if d1_c!=0:
+            f_1=r_1-(d1_c-y)
+        if d2_c!=0:
+            f_2=r_2-(d2_c-y)
+        if d2_c!=0:
+            f_3=r_3-(y-d3_c)
+        if d4_c!=0:
+            f_4=r_4-(y-d4_c)
+        r_t=r_1+r_2+r_3+r_4
+        #count_diag=r_t //reducing for loops on top
+    elif x<=y and x<(n-y):
+        if d1_c!=0:
+            f_1=r1-(d1_c-1-y)
+        if d2_c!=0:
+            f_2=r2-(d2_c-1-y)
+        if d3_c!=0:
+            f_3=(d3_c)
+        if d4_c!=0:
+            f_4=r4-(y-1-d4_c)
+        c_t=r4+r1+r2+r3
+        #count_diag =c_t //reduce for loops on top
+    
+    
+###subtract final diagonal obstacles from result####
+    if k==0:
+        res=q_a_count
+    else:
+        res=result-f_1-f_2-f_3-f_4 
+
+
+    return res
+        
+
+if __name__ == '__main__':
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
+   first_multiple_input = input().rstrip().split()
+
+    n = int(first_multiple_input[0])
+
+    k = int(first_multiple_input[1])
+
+    second_multiple_input = input().rstrip().split()
+
+    r_q = int(second_multiple_input[0])
+
+    c_q = int(second_multiple_input[1])
+
+    obstacles = []
+
+    for _ in range(k):
+        obstacles.append(list(map(int, input().rstrip().split())))
+
+    result = queensAttack(n, k, r_q, c_q, obstacles)
+
+    fptr.write(str(result) + '\n')
+
+    fptr.close()

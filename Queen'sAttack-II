@@ -57,7 +57,7 @@ def queensAttack(n, k,y ,x,  obs):
     else:
         for b in range(v-1,n):
             y_u_r_d+=1
-x_r_u_d+=1
+            x_r_u_d+=1
             if y_u_r_d<=n and x_r_u_d<=n and y_u_r_d>=1 and x_r_u_d>=1:
                 d=[y_u_r_d,x_r_u_d]
                 r_u+=[d]
@@ -145,7 +145,7 @@ x_r_u_d+=1
             d2+=[t[0]]
         elif t[0]<y and t[1]>x:
             d3+=[t[0]]
-       elif t[0]<y and t[1]<x:
+        elif t[0]<y and t[1]<x:
             d4+=[t[0]]
         
     if len(d1)==0:
@@ -161,7 +161,7 @@ x_r_u_d+=1
     d2_c=min(d2)
     d3_c=max(d3)
     d4_c=max(d4)
-   f_1=0
+    f_1=0
     f_2=0
     f_3=0
     f_4=0

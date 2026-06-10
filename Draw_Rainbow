@@ -1,0 +1,23 @@
+import turtle
+sc=turtle.Screen()
+pen=turtle.Turtle()
+def semi_cycle(col,rad,val):
+    pen.color(col)
+    pen.circle(rad,-180)
+    pen.up()
+    pen.setpos(val,0)
+    pen.down()
+    pen.right(180)
+    
+if __name__=="__main__":
+   sc.setup(600,600)
+   sc.bgcolor('#ADD8E6')
+   col=["violet","indigo","blue","green","yellow","orange","red"]
+   pen.right(90)
+   pen.width(40)
+   pen.speed(7)
+   for i in range(7):
+       semi_cycle(col[i],30*(i+8),-30*(i+1))
+       pen.hideturtle()
+   
+   
